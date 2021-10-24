@@ -1,0 +1,32 @@
+service: serverless-flask-container
+
+provider:
+  name: aws
+  runtime: python3.7
+  stage: dev
+
+plugins:
+  - serverless-wsgi
+
+functions:
+  app:
+    handler: wsgi_handler.handler
+    environment: ${self:custom.environment}
+    timeout: 30
+    events:
+      - http: ANY /
+      - http: 'ANY /{proxy+}'
+
+package:
+  exclude:
+    - .git/**
+    - node_modules/**
+    - .gitignore
+    - package-lock.json
+
+custom:
+  wsgi:
+    app: app.app
+    packRequirements: false
+  environment:
+    FLASK_ENV: production
