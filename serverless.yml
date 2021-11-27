@@ -7,7 +7,6 @@ provider:
 
 plugins:
   - serverless-wsgi
-
 functions:
   app:
     handler: wsgi_handler.handler
