@@ -1,11 +1,9 @@
 FROM public.ecr.aws/lambda/python:3.7
+COPY . ${LAMBDA_TASK_ROOT}
+RUN echo ${LAMBDA_TASK_ROOT}
+RUN ls -lsa ${LAMBDA_TASK_ROOT}
 
-COPY . /app
-WORKDIR /app
+COPY requirements.txt  .
+RUN  pip3 install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
 
-RUN pip install -r requirements.txt
-
-ENV FLASK_ENV production
-EXPOSE 8080
-ENTRYPOINT ["python"]
-CMD ["app.py"]
+CMD ["app.handler"]
